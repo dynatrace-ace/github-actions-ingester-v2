@@ -9,10 +9,12 @@ const http = new httpm.HttpClient('client')
 async function getAccessToken(
   clientId: string,
   clientSecret: string,
-  resource: string
+  resource: string,
+  dtSSOUrl: string
+
 ): Promise<string> {
   const response = await http.post(
-    'https://sso-sprint.dynatracelabs.com/sso/oauth2/token',
+    dtSSOUrl,
     `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}&resource=${resource}&scope=storage:bizevents:write storage:buckets:read storage:events:write`,
     {
       'content-type': 'application/x-www-form-urlencoded'
@@ -45,11 +47,14 @@ export async function run(): Promise<void> {
     const clientSecret = core.getInput('dt-client-secret')
     const environmentId = core.getInput('dt-environment-id')
     const resource = core.getInput('dt-resource')
+    const dtSSOUrl = core.getInput('dt-sso-url')
     const cloudEvent = buildCloudEvent(github.context.payload)
+
     const dynatraceAccessToken = await getAccessToken(
       clientId,
       clientSecret,
-      resource
+      resource,
+      dtSSOUrl
     )
     const response = await http.post(
       `${environmentId}/platform/classic/environment-api/v2/bizevents/ingest`,

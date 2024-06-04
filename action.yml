@@ -14,6 +14,10 @@ inputs:
   dt-resource:
     required: true
     description: 'Dynatrace Resource URN'
+  dt-sso-url:
+    required: false
+    default: 'https://sso.dynatrace.com/sso/oauth2/token'
+    description: 'Dynatrace SSO URL'
 runs:
   using: 'node16'
   main: 'dist/index.js'
