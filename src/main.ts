@@ -28,7 +28,6 @@ async function getAccessToken(
       core.info('OAuth response')
       core.debug(body)
     }
-    core.info(body)
     return body.access_token as string
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
