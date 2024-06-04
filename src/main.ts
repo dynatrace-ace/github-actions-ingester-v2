@@ -12,27 +12,25 @@ async function getAccessToken(
   resource: string,
   dtSSOUrl: string,
   debug: string
-
 ): Promise<string> {
-  try{
-  console.log('Getting OAuth token')
-  const response = await http.post(
-    dtSSOUrl,
-    `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}&resource=${resource}&scope=storage:bizevents:write storage:buckets:read storage:events:write`,
-    {
-      'content-type': 'application/x-www-form-urlencoded'
+  try {
+    console.log('Getting OAuth token')
+    const response = await http.post(
+      dtSSOUrl,
+      `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}&resource=${resource}&scope=storage:bizevents:write storage:buckets:read storage:events:write`,
+      {
+        'content-type': 'application/x-www-form-urlencoded'
+      }
+    )
+
+    const body = JSON.parse(await response.readBody())
+    if (debug == 'true') {
+      core.info('OAuth response')
+      core.debug(body)
     }
-  )
-  
-  const body = JSON.parse(await response.readBody())
-  if (debug == 'true'){
-    console.log('OAuth response')
-    console.log(body)
-  }
-  return body.access_token as string
-} catch (error) {
-  console.log('Error getting OAuth token')
-  if (error instanceof Error) core.setFailed(error.message)
+    return body.access_token as string
+  } catch (error) {
+    if (error instanceof Error) core.setFailed(error.message)
   }
 }
 
