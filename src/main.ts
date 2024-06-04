@@ -14,6 +14,7 @@ async function getAccessToken(
   debug: string
 
 ): Promise<string> {
+  try{
   console.log('Getting OAuth token')
   const response = await http.post(
     dtSSOUrl,
@@ -29,6 +30,10 @@ async function getAccessToken(
     console.log(body)
   }
   return body.access_token as string
+} catch (error) {
+  console.log('Error getting OAuth token')
+  if (error instanceof Error) core.setFailed(error.message)
+  }
 }
 
 function buildCloudEvent(payload: WebhookPayload): unknown {
