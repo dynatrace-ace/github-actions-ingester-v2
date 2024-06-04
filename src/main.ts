@@ -14,6 +14,7 @@ async function getAccessToken(
   debug: string
 
 ): Promise<string> {
+  console.log('Getting OAuth token')
   const response = await http.post(
     dtSSOUrl,
     `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}&resource=${resource}&scope=storage:bizevents:write storage:buckets:read storage:events:write`,
@@ -21,8 +22,9 @@ async function getAccessToken(
       'content-type': 'application/x-www-form-urlencoded'
     }
   )
+  
   const body = JSON.parse(await response.readBody())
-  if (debug === 'true'){
+  if (debug == 'true'){
     console.log('OAuth response')
     console.log(body)
   }
