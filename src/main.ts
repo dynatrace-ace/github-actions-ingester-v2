@@ -10,7 +10,8 @@ async function getAccessToken(
   clientId: string,
   clientSecret: string,
   resource: string,
-  dtSSOUrl: string
+  dtSSOUrl: string,
+  debug: string
 
 ): Promise<string> {
   const response = await http.post(
@@ -21,7 +22,10 @@ async function getAccessToken(
     }
   )
   const body = JSON.parse(await response.readBody())
-
+  if (debug === 'true'){
+    console.log('OAuth response')
+    console.log(body)
+  }
   return body.access_token as string
 }
 
@@ -48,13 +52,15 @@ export async function run(): Promise<void> {
     const environmentId = core.getInput('dt-environment-id')
     const resource = core.getInput('dt-resource')
     const dtSSOUrl = core.getInput('dt-sso-url')
+    const debug = core.getInput('debug')
     const cloudEvent = buildCloudEvent(github.context.payload)
 
     const dynatraceAccessToken = await getAccessToken(
       clientId,
       clientSecret,
       resource,
-      dtSSOUrl
+      dtSSOUrl,
+      debug
     )
     const response = await http.post(
       `${environmentId}/platform/classic/environment-api/v2/bizevents/ingest`,
