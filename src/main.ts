@@ -14,7 +14,7 @@ async function getAccessToken(
   debug: string
 ): Promise<string> {
   try {
-    console.log('Getting OAuth token')
+    console.info('Getting OAuth token')
     const response = await http.post(
       dtSSOUrl,
       `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}&resource=${resource}&scope=storage:bizevents:write storage:buckets:read storage:events:write`,
@@ -28,6 +28,7 @@ async function getAccessToken(
       core.info('OAuth response')
       core.debug(body)
     }
+    core.info(body)
     return body.access_token as string
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
