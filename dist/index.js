@@ -29263,6 +29263,8 @@ async function run() {
         const resource = core.getInput('dt-resource');
         const dtSSOUrl = core.getInput('dt-sso-url');
         const debug = core.getInput('debug');
+        core.info('GH context payload:');
+        core.info(JSON.stringify(github.context.payload, null, 2));
         const cloudEvent = buildCloudEvent(github.context.payload);
         const dynatraceAccessToken = await getAccessToken(clientId, clientSecret, resource, dtSSOUrl, debug);
         const response = await http.post(`${environmentId}/platform/classic/environment-api/v2/bizevents/ingest`, JSON.stringify(cloudEvent), {
