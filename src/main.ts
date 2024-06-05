@@ -26,7 +26,8 @@ async function getAccessToken(
     const body = JSON.parse(await response.readBody())
     if (debug == 'true') {
       core.info('OAuth response')
-      core.info(body)
+      const logResponse = JSON.stringify(body, null, 2)
+      core.info(logResponse)
     }
     return body.access_token as string
   } catch (error) {
