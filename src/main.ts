@@ -35,7 +35,7 @@ async function getAccessToken(
   }
 }
 
-function buildCloudEvent(payload: WebhookPayload): unknown {
+function buildCloudEvent(payload: WorkflowRunCompletedEvent): unknown {
   const workflowRun = (payload as WorkflowRunCompletedEvent).workflow_run
   return {
     specversion: '1.0',
@@ -58,10 +58,13 @@ export async function run(): Promise<void> {
     const environmentId = core.getInput('dt-environment-id')
     const resource = core.getInput('dt-resource')
     const dtSSOUrl = core.getInput('dt-sso-url')
+    const workflowInfo = core.getInput('workflow-info')
     const debug = core.getInput('debug')
     core.info('GH context payload:')
-    core.info(JSON.stringify(github.context.payload, null, 2))
-    const cloudEvent = buildCloudEvent(github.context.payload)
+    core.info(JSON.stringify(workflowInfo, null, 2))
+    const cloudEvent = buildCloudEvent(
+      workflowInfo as unknown as WorkflowRunCompletedEvent
+    )
 
     const dynatraceAccessToken = await getAccessToken(
       clientId,
