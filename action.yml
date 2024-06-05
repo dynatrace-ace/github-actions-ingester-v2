@@ -18,9 +18,6 @@ inputs:
     required: false
     default: 'https://sso.dynatrace.com/sso/oauth2/token'
     description: 'Dynatrace SSO URL'
-  workflow-info:
-    required: true
-    description: 'Workflow information github.context.payload'
 
   debug:
     required: false

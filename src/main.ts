@@ -58,12 +58,10 @@ export async function run(): Promise<void> {
     const environmentId = core.getInput('dt-environment-id')
     const resource = core.getInput('dt-resource')
     const dtSSOUrl = core.getInput('dt-sso-url')
-    const workflowInfo = core.getInput('workflow-info')
     const debug = core.getInput('debug')
-    core.info('GH context payload:')
-    core.info(JSON.stringify(workflowInfo, null, 2))
+
     const cloudEvent = buildCloudEvent(
-      workflowInfo as unknown as WorkflowRunCompletedEvent
+      github.context.payload as WorkflowRunCompletedEvent
     )
 
     const dynatraceAccessToken = await getAccessToken(
